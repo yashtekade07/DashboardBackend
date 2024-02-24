@@ -3,7 +3,13 @@ import { callEntry } from '../models/callEntry.js';
 
 export const getCallEntries = async (req, res, next) => {
   try {
-    const callEntries = await callEntry.find();
+    const campaignId = req.query.campaignId || '';
+    const callEntries = await callEntry.find({
+      campaignId: {
+        $regex: campaignId,
+        $options: 'i',
+      },
+    });
     return res.status(200).json({
       success: true,
       message: 'Call Entries Fetched Successfully!',
@@ -40,8 +46,7 @@ export const postCallEntries = async (req, res, next) => {
 
 callEntry.watch().on('change', async () => {
   let stats = await Stats.find().sort({ createdAt: 'desc' }).limit(1);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = Date.now();
 
   const callEntries = await callEntry.find({
     createdAt: { $lt: today },
