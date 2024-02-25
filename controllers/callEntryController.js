@@ -1,4 +1,3 @@
-import { Stats } from '../models/Stats.js';
 import { callEntry } from '../models/callEntry.js';
 
 export const getCallEntries = async (req, res, next) => {
