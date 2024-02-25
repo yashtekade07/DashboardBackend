@@ -1,15 +1,14 @@
-import { callEntry } from "../models/callEntry.js";
+import { callEntry } from '../models/callEntry.js';
 
 export const getCallEntries = async (req, res, next) => {
   try {
     let { campaignId, startDate, endDate } = req.query;
     const formattedStartDate = new Date(startDate);
     const formattedEndDate = new Date(endDate);
-    if (endDate)
-      formattedEndDate.setDate(formattedEndDate.getDate() + 1);
+    if (endDate) formattedEndDate.setDate(formattedEndDate.getDate() + 1);
 
     let filter = {
-      campaignId: { $regex: campaignId, $options: "i" },
+      campaignId: { $regex: campaignId, $options: 'i' },
       $and: [],
     };
 
@@ -32,7 +31,7 @@ export const getCallEntries = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: "Call Entries Fetched Successfully!",
+      message: 'Call Entries Fetched Successfully!',
       callEntries,
     });
   } catch (error) {
@@ -54,7 +53,7 @@ export const postCallEntries = async (req, res, next) => {
     });
     res.status(201).json({
       success: true,
-      message: "Call Entry Created Successfully!",
+      message: 'Call Entry Created Successfully!',
     });
   } catch (error) {
     return res.status(500).json({
@@ -64,8 +63,8 @@ export const postCallEntries = async (req, res, next) => {
   }
 };
 
-callEntry.watch().on("change", async () => {
-  let stats = await Stats.find().sort({ createdAt: "desc" }).limit(1);
+callEntry.watch().on('change', async () => {
+  let stats = await Stats.find().sort({ createdAt: 'desc' }).limit(1);
   const today = Date.now();
 
   const callEntries = await callEntry.find({
@@ -76,8 +75,8 @@ callEntry.watch().on("change", async () => {
     { length: 20 },
     (_, index) => `campaign_${index + 1}`
   );
-  const statuses = ["completed", "in-progress", "scheduled"];
-  const categories = ["category1", "category2", "category3"];
+  const statuses = ['completed', 'in-progress', 'scheduled'];
+  const categories = ['category1', 'category2', 'category3'];
 
   let category = [];
   let campaign = [];
